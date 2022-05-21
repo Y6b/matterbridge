@@ -106,6 +106,7 @@ func (b *Btelegram) Send(msg config.Message) (string, error) {
 
 	// Delete message
 	if msg.Event == config.EventMsgDelete {
+		b.Log.Debugf("Msg to be deleted %#v", msg)
 		return b.handleDelete(&msg, chatid)
 	}
 

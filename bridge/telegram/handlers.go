@@ -372,6 +372,7 @@ func (b *Btelegram) handleDownload(rmsg *config.Message, message *tgbotapi.Messa
 	// rename .oga to .ogg  https://github.com/42wim/matterbridge/issues/906#issuecomment-741793512
 	if strings.HasSuffix(name, ".oga") && message.Audio != nil {
 		name = strings.Replace(name, ".oga", ".ogg", 1)
+		b.Log.Debugf("Changed file to ogg :%s", name)
 	}
 
 	helper.HandleDownloadData(b.Log, rmsg, name, message.Caption, "", data, b.General)
@@ -404,7 +405,7 @@ func (b *Btelegram) handleDelete(msg *config.Message, chatid int64) (string, err
 	}
 
 	cfg := tgbotapi.NewDeleteMessage(chatid, msgid)
-	_, err = b.c.Request(cfg)
+	_, err = b.c.Send(cfg)
 
 	return "", err
 }
@@ -458,12 +459,20 @@ func (b *Btelegram) handleUploadFile(msg *config.Message, chatid int64, parentID
 				pc.Caption, pc.ParseMode = TGGetParseMode(b, msg.Username, fi.Comment)
 			}
 			media = append(media, pc)
-		case ".mp4", ".m4v":
+		case ".mp4", ".m4v",".f4v":{
+			file.Name = "test.mp4" // to fix file not appearing
+
 			vc := tgbotapi.NewInputMediaVideo(file)
+			b.Log.Debug("Video File detected")
+
 			if fi.Comment != "" {
 				vc.Caption, vc.ParseMode = TGGetParseMode(b, msg.Username, fi.Comment)
-			}
+			} else { userN := msg.Username[:len(msg.Username)-2]
+				vc.Caption = string("Video from " + userN)
+			b.Log.Debugf("vc.Caption data %s and file name is %s",vc.Caption,file.Name) }
+			vc.SupportsStreaming = true
 			media = append(media, vc)
+		}
 		case ".mp3", ".oga":
 			ac := tgbotapi.NewInputMediaAudio(file)
 			if fi.Comment != "" {

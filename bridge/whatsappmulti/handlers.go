@@ -119,12 +119,13 @@ func (b *Bwhatsapp) handleTextMessage(messageInfo types.MessageInfo, msg *proto.
 	}
 
 
-if ci != nil{
-	if len(ci.QuotedMessage.GetConversation()) >0 {
-		//handleQuote , only for text msgs now
-		text = strings.Join([]string{text, "(re" , ci.GetParticipant() ,ci.QuotedMessage.GetConversation(),")"}, " ")
-	}
-}
+    if ci != nil{
+        if len(ci.QuotedMessage.GetConversation()) >0 {
+            //handleQuote , only for text msgs now
+            text = strings.Join([]string{text, "(re" , ci.GetParticipant() ,ci.QuotedMessage.GetConversation(),")"}, " ")
+            b.Log.Debugf("Qoutes Message is %#v", text)
+        }
+    }
 
 
 	rmsg := config.Message{

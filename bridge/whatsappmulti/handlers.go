@@ -119,7 +119,7 @@ func (b *Bwhatsapp) handleTextMessage(messageInfo types.MessageInfo, msg *proto.
 	}
 
 
-    if ci != nil{
+    if ci.QuotedMessage.ExtendedTextMessage != nil{
 	//b.Log.Debugf("Qouted msg is %#v",ci.QuotedMessage.ExtendedTextMessage.GetText())
 
         if len(ci.QuotedMessage.ExtendedTextMessage.GetText()) >0 {

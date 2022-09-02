@@ -120,9 +120,11 @@ func (b *Bwhatsapp) handleTextMessage(messageInfo types.MessageInfo, msg *proto.
 
 
     if ci != nil{
-        if len(ci.QuotedMessage.GetConversation()) >0 {
+	//b.Log.Debugf("Qouted msg is %#v",ci.QuotedMessage.ExtendedTextMessage.GetText())
+
+        if len(ci.QuotedMessage.ExtendedTextMessage.GetText()) >0 {
             //handleQuote , only for text msgs now
-            text = strings.Join([]string{text, "(re" , ci.GetParticipant() ,ci.QuotedMessage.GetConversation(),")"}, " ")
+            text = strings.Join([]string{text, "(re" , ci.GetParticipant() ,ci.QuotedMessage.ExtendedTextMessage.GetText(),")"}, " ")
             b.Log.Debugf("Qoutes Message is %#v", text)
         }
     }

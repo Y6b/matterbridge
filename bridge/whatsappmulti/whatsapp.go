@@ -286,6 +286,40 @@ func (b *Bwhatsapp) PostImageMessage(msg config.Message, filetype string) (strin
 	return ID, err
 }
 
+// Post an video message from the bridge to WhatsApp
+// Handle, video/mp4 video/3gpp MIME types
+func (b *Bwhatsapp) PostVideoMessage(msg config.Message, filetype string) (string, error) {
+	groupJID, _ := types.ParseJID(msg.Channel)
+
+	fi := msg.Extra["file"][0].(config.FileInfo)
+
+	caption := msg.Username + fi.Comment
+
+	resp, err := b.wc.Upload(context.Background(), *fi.Data, whatsmeow.MediaVideo)
+	if err != nil {
+		return "", err
+	}
+
+	var message proto.Message
+
+	message.ImageMessage = &proto.VideoMessage{
+		Mimetype:      &filetype,
+		Caption:       &caption,
+		MediaKey:      resp.MediaKey,
+		FileEncSha256: resp.FileEncSHA256,
+		FileSha256:    resp.FileSHA256,
+		FileLength:    goproto.Uint64(resp.FileLength),
+		Url:           &resp.URL,
+	}
+
+	b.Log.Debugf("=> Sending %#v", msg)
+	b.Log.Debugf("VideoMessageStruct: %+v", message.ImageMessage)
+
+	ID := whatsmeow.GenerateMessageID()
+	_, err = b.wc.SendMessage(groupJID, ID, &message)
+
+	return ID, err
+}
 // Post an audio message
 // Handle for audio/ogg codecs=opus
 func (b *Bwhatsapp) PostAudioMessage(msg config.Message, filetype string) (string, error) {
@@ -364,6 +398,8 @@ func (b *Bwhatsapp) Send(msg config.Message) (string, error) {
 		switch filetype {
 		case "image/jpeg", "image/png", "image/gif":
 			return b.PostImageMessage(msg, filetype)
+		case "video/mp4", "video/3gpp":
+			return b.PostVideoMessage(msg, filetype)
 		case "audio/ogg":
 			return b.PostAudioMessage(msg, "audio/ogg; codecs=opus")
 		default:

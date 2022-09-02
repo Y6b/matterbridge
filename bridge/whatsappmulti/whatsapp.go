@@ -302,7 +302,7 @@ func (b *Bwhatsapp) PostVideoMessage(msg config.Message, filetype string) (strin
 
 	var message proto.Message
 
-	message.ImageMessage = &proto.VideoMessage{
+	message.VideoMessage = &proto.VideoMessage{
 		Mimetype:      &filetype,
 		Caption:       &caption,
 		MediaKey:      resp.MediaKey,

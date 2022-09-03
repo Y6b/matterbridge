@@ -24,6 +24,7 @@ func (b *Bwhatsapp) eventHandler(evt interface{}) {
 	}
 }
 
+//handle outgoing WhatsApp messages to other gateways
 func (b *Bwhatsapp) handleMessage(message *events.Message) {
 	msg := message.Message
 
@@ -67,6 +68,8 @@ func (b *Bwhatsapp) handleMessage(message *events.Message) {
 		b.handleDocumentMessage(message)
 	case msg.ImageMessage != nil:
 		b.handleImageMessage(message)
+	case msg.StickerMessage != nil:
+		b.handleStickerMessage(message)
 	}
 }
 
@@ -268,7 +271,60 @@ func (b *Bwhatsapp) handleVideoMessage(msg *events.Message) {
 	// Move file to bridge storage
 	helper.HandleDownloadData(b.Log, &rmsg, filename, imsg.GetCaption(), "", &data, b.General)
 
-	b.Log.Debugf("<= Sending message from %s on %s to gateway", senderJID, b.Account)
+	b.Log.Debugf("<= Sending video message from %s on %s to gateway", senderJID, b.Account)
+	b.Log.Debugf("<= Message is %#v", rmsg)
+
+	b.Remote <- rmsg
+}
+
+// HandleImageMessage sent from WhatsApp, relay it to the brige
+func (b *Bwhatsapp) handleStickerMessage(msg *events.Message) {
+	imsg := msg.Message.GetStickerMessage()
+
+	senderJID := msg.Info.Sender
+	senderName := b.getSenderName(senderJID)
+	ci := imsg.GetContextInfo()
+
+	if senderJID == (types.JID{}) && ci.Participant != nil {
+		senderJID = types.NewJID(ci.GetParticipant(), types.DefaultUserServer)
+	}
+
+	rmsg := config.Message{
+		UserID:   senderJID.String(),
+		Username: senderName,
+		Channel:  msg.Info.Chat.String(),
+		Account:  b.Account,
+		Protocol: b.Protocol,
+		Extra:    make(map[string][]interface{}),
+		ID:       msg.Info.ID,
+	}
+
+	if avatarURL, exists := b.userAvatars[senderJID.String()]; exists {
+		rmsg.Avatar = avatarURL
+	}
+
+	fileExt, err := mime.ExtensionsByType(imsg.GetMimetype())
+	if err != nil {
+		b.Log.Errorf("Mimetype detection error: %s", err)
+
+		return
+	}
+
+	filename := fmt.Sprintf("%v%v", msg.Info.ID, fileExt[0])
+
+	b.Log.Debugf("Trying to download %s with type %s", filename, imsg.GetMimetype())
+
+	data, err := b.wc.Download(imsg)
+	if err != nil {
+		b.Log.Errorf("Download sticker failed: %s", err)
+
+		return
+	}
+
+	// Move file to bridge storage
+	helper.HandleDownloadData(b.Log, &rmsg, filename, imsg.GetCaption(), "", &data, b.General)
+
+	b.Log.Debugf("<= Sending sticker message from %s on %s to gateway", senderJID, b.Account)
 	b.Log.Debugf("<= Message is %#v", rmsg)
 
 	b.Remote <- rmsg

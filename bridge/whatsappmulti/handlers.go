@@ -322,7 +322,7 @@ func (b *Bwhatsapp) handleStickerMessage(msg *events.Message) {
 	}
 
 	// Move file to bridge storage
-	helper.HandleDownloadData(b.Log, &rmsg, filename, imsg.GetCaption(), "", &data, b.General)
+	helper.HandleDownloadData(b.Log, &rmsg, filename, "sticker message", "", &data, b.General)
 
 	b.Log.Debugf("<= Sending sticker message from %s on %s to gateway", senderJID, b.Account)
 	b.Log.Debugf("<= Message is %#v", rmsg)
@@ -373,7 +373,7 @@ func (b *Bwhatsapp) handleAudioMessage(msg *events.Message) {
 
 	data, err := b.wc.Download(imsg)
 	if err != nil {
-		b.Log.Errorf("Download video failed: %s", err)
+		b.Log.Errorf("Download audio message failed: %s", err)
 
 		return
 	}

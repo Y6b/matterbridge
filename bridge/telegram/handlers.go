@@ -490,13 +490,10 @@ func (b *Btelegram) handleUploadFile(msg *config.Message, chatid int64, parentID
 			return strconv.Itoa(res.MessageID), nil
 
 		case ".webp":
-			voc := tgbotapi.NewSticker(chatid, file)
+			sc := tgbotapi.NewSticker(chatid, file)
 			//voc.Caption, voc.ParseMode = TGGetParseMode(b, msg.Username, fi.Comment)
-			voc.ReplyToMessageID = parentID
-			res, err := b.c.Send(voc)
-			if err != nil {
-				return "", err
-			}
+			sc.ReplyToMessageID = parentID
+			media = append(media, sc)
 
 
 		default:

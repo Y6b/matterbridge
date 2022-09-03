@@ -494,7 +494,11 @@ func (b *Btelegram) handleUploadFile(msg *config.Message, chatid int64, parentID
 			//sc.Caption, sc.ParseMode = TGGetParseMode(b, msg.Username, fi.Comment)
 			sc.ReplyToMessageID = parentID
 			b.Log.Debugf("sc dump ==> %+v",sc)
-			media = append(media, sc)
+			res, err := b.c.Send(sc)
+			if err != nil {
+				return "", err
+			}
+			return strconv.Itoa(res.MessageID), nil
 
 
 		default:

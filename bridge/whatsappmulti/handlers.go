@@ -280,7 +280,7 @@ func (b *Bwhatsapp) handleVideoMessage(msg *events.Message) {
 // HandleImageMessage sent from WhatsApp, relay it to the brige
 func (b *Bwhatsapp) handleStickerMessage(msg *events.Message) {
 	imsg := msg.Message.GetStickerMessage()
-	b.Log.Infof("Receiving sticker message %#v", imsg)
+	b.Log.Infof("Receiving sticker message %+v", imsg)
 
 	senderJID := msg.Info.Sender
 	senderName := b.getSenderName(senderJID)

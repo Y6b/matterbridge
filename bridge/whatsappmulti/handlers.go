@@ -284,7 +284,7 @@ func (b *Bwhatsapp) handleStickerMessage(msg *events.Message) {
 	b.Log.Infof("Receiving sticker message %+v", imsg)
 
     //set URL to mmg.whatsapp.net instead of web.whatsapp.net
-    imsg.url := "https://mmg.whatsapp.net"
+    imsg.Url := "https://mmg.whatsapp.net"
 
 	senderJID := msg.Info.Sender
 	senderName := b.getSenderName(senderJID)

@@ -160,6 +160,7 @@ func (b *Bwhatsapp) handleTextMessage(messageInfo types.MessageInfo, msg *proto.
 // HandleImageMessage sent from WhatsApp, relay it to the brige
 func (b *Bwhatsapp) handleImageMessage(msg *events.Message) {
 	imsg := msg.Message.GetImageMessage()
+	b.Log.Infof("Receiving image message %+v", imsg)
 
 	senderJID := msg.Info.Sender
 	senderName := b.getSenderName(senderJID)

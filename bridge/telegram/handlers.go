@@ -491,7 +491,7 @@ func (b *Btelegram) handleUploadFile(msg *config.Message, chatid int64, parentID
 
 		case ".webp":
 			sc := tgbotapi.NewSticker(chatid, file)
-			sc.Caption, sc.ParseMode = TGGetParseMode(b, msg.Username, fi.Comment)
+			//sc.Caption, sc.ParseMode = TGGetParseMode(b, msg.Username, fi.Comment)
 			sc.ReplyToMessageID = parentID
 			media = append(media, sc)
 

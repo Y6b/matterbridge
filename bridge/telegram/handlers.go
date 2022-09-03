@@ -493,6 +493,7 @@ func (b *Btelegram) handleUploadFile(msg *config.Message, chatid int64, parentID
 			sc := tgbotapi.NewSticker(chatid, file)
 			//sc.Caption, sc.ParseMode = TGGetParseMode(b, msg.Username, fi.Comment)
 			sc.ReplyToMessageID = parentID
+			b.Log.Debugf("sc dump ==> %+v",sc)
 			media = append(media, sc)
 
 

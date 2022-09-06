@@ -383,7 +383,7 @@ func (b *Bwhatsapp) PostStickerMessage(msg config.Message, filetype string) (str
 		FileLength:    goproto.Uint64(resp.FileLength),
 		Url:           &resp.URL,
 		DirectPath:    &resp.DirectPath,
-		IsAnimated:     true,
+		IsAnimated:     &[]bool{true}[0],
 	}
 
 	b.Log.Debugf("=> Sending %#v", msg)

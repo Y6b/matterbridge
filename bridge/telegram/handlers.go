@@ -365,6 +365,7 @@ func (b *Btelegram) handleDownload(rmsg *config.Message, message *tgbotapi.Messa
 
 	if strings.HasSuffix(name, ".tgs.webp") {
 		b.maybeConvertTgs(&name, data)
+        b.Log.Debugf("Converting :%s", name)
 	} else if strings.HasSuffix(name, ".webp") {
 		b.maybeConvertWebp(&name, data)
 	}

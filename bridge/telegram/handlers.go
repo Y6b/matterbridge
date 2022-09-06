@@ -286,7 +286,7 @@ func (b *Btelegram) handleDownloadAvatar(userid int64, channel string) {
 }
 
 func (b *Btelegram) maybeConvertTgs(name *string, data *[]byte) {
-	format := b.GetString("MediaConvertTgs")
+	format := "webp" //b.GetString("MediaConvertTgs")
 	b.Log.Debugf("The format is :%s", format)
 	if helper.SupportsFormat(format) {
 		b.Log.Debugf("Format supported by %s, converting %v", helper.LottieBackend(), name)

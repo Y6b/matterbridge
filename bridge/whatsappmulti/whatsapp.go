@@ -356,6 +356,43 @@ func (b *Bwhatsapp) PostAudioMessage(msg config.Message, filetype string) (strin
 
 	return ID, err
 }
+
+// Post a sticker message
+// Handle for webp
+func (b *Bwhatsapp) PostStickerMessage(msg config.Message, filetype string) (string, error) {
+	groupJID, _ := types.ParseJID(msg.Channel)
+
+	fi := msg.Extra["file"][0].(config.FileInfo)
+
+	// caption := msg.Username + fi.Comment
+
+	resp, err := b.wc.Upload(context.Background(), *fi.Data, whatsmeow.MediaImage)
+	if err != nil {
+		return "", err
+	}
+
+	//filetype = "audio/ogg; codecs=opus"
+
+	var message proto.Message
+
+	message.StickerMessage = &proto.StickerMessage{
+		Mimetype:      &filetype,
+		MediaKey:      resp.MediaKey,
+		FileEncSha256: resp.FileEncSHA256,
+		FileSha256:    resp.FileSHA256,
+		FileLength:    goproto.Uint64(resp.FileLength),
+		Url:           &resp.URL,
+		DirectPath:    &resp.DirectPath,
+	}
+
+	b.Log.Debugf("=> Sending %#v", msg)
+	b.Log.Debugf("StickerMessageStruct: %+v", message.StickerMessage)
+
+	ID := whatsmeow.GenerateMessageID()
+	_, err = b.wc.SendMessage(groupJID, ID, &message)
+
+	return ID, err
+}
 // Send a message from the bridge to WhatsApp
 func (b *Bwhatsapp) Send(msg config.Message) (string, error) {
 	groupJID, _ := types.ParseJID(msg.Channel)

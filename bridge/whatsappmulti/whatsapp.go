@@ -439,6 +439,8 @@ func (b *Bwhatsapp) Send(msg config.Message) (string, error) {
 			return b.PostVideoMessage(msg, filetype)
 		case "audio/ogg":
 			return b.PostAudioMessage(msg, "audio/ogg; codecs=opus")
+		case "image/webp":
+			return b.PostStickerMessage(msg, filetype)
 		default:
 			return b.PostDocumentMessage(msg, filetype)
 		}

@@ -312,6 +312,8 @@ func (b *Bwhatsapp) handleStickerMessage(msg *events.Message) {
 		return
 	}
 
+    if (imsg.GetIsAnimated()) fileExt[0]="gif"
+
 	filename := fmt.Sprintf("%v%v", msg.Info.ID, fileExt[0])
 
 	b.Log.Debugf("Trying to download %s with type %s", filename, imsg.GetMimetype())

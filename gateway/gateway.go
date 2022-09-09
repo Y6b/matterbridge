@@ -510,6 +510,7 @@ func (gw *Gateway) SendMessage(
 
 	mID, err := dest.Send(msg)
 	if err != nil {
+	    gw.logger.Errorf("GW SendMessage failed: %s", err)
 		return mID, err
 	}
 

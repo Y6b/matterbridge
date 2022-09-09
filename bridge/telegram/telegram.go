@@ -166,6 +166,7 @@ func (b *Btelegram) sendMessage(chatid int64, username, text string, parentID in
 
 	res, err := b.c.Send(m)
 	if err != nil {
+	    b.Log.Errorf("sendMessage failed: %s", Err)
 		return "", err
 	}
 	return strconv.Itoa(res.MessageID), nil
@@ -177,7 +178,7 @@ func (b *Btelegram) sendMediaFiles(msg *config.Message, chatid int64, parentID i
 		return "", nil
 	}
 	mg := tgbotapi.MediaGroupConfig{ChatID: chatid, ChannelUsername: msg.Username, Media: media, ReplyToMessageID: parentID}
-	b.Log.Errorf("mg dump => %v",mg)
+	b.Log.Debugf("mg dump => %v",mg)
 	messages, err := b.c.SendMediaGroup(mg)
 	if err != nil {
 		return "", err

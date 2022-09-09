@@ -454,8 +454,14 @@ func (b *Btelegram) handleUploadFile(msg *config.Message, chatid int64, parentID
 			Bytes: *fi.Data,
 		}
 		switch filepath.Ext(fi.Name) {
-		case ".jpg", ".jpe", ".png",".gif":
+		case ".jpg", ".jpe", ".png":
 			pc := tgbotapi.NewInputMediaPhoto(file)
+			if fi.Comment != "" {
+				pc.Caption, pc.ParseMode = TGGetParseMode(b, msg.Username, fi.Comment)
+			}
+			media = append(media, pc)
+		case ".gif":
+			pc := tgbotapi.NewInputMediaAnimation(file)
 			if fi.Comment != "" {
 				pc.Caption, pc.ParseMode = TGGetParseMode(b, msg.Username, fi.Comment)
 			}

@@ -312,7 +312,9 @@ func (b *Bwhatsapp) handleStickerMessage(msg *events.Message) {
 		return
 	}
 
-    if (imsg.GetIsAnimated()) fileExt[0]="gif"
+    if (imsg.GetIsAnimated()) {
+        fileExt[0]="gif"
+    }
 
 	filename := fmt.Sprintf("%v%v", msg.Info.ID, fileExt[0])
 

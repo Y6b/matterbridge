@@ -461,11 +461,11 @@ func (b *Btelegram) handleUploadFile(msg *config.Message, chatid int64, parentID
 			}
 			media = append(media, pc)
 		case ".gif":
-			pc := tgbotapi.NewInputMediaAnimation(file)
+			gc := tgbotapi.NewInputMediaAnimation(file)
 			if fi.Comment != "" {
-				pc.Caption, pc.ParseMode = TGGetParseMode(b, msg.Username, fi.Comment)
+				gc.Caption, gc.ParseMode = TGGetParseMode(b, msg.Username, fi.Comment)
 			}
-			media = append(media, pc)
+			media = append(media, gc)
 		case ".mp4", ".m4v",".f4v":{
 			file.Name = "test.mp4" // to fix file not appearing
 

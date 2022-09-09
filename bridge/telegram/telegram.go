@@ -166,7 +166,7 @@ func (b *Btelegram) sendMessage(chatid int64, username, text string, parentID in
 
 	res, err := b.c.Send(m)
 	if err != nil {
-	    b.Log.Errorf("sendMessage failed: %s", Err)
+	    b.Log.Errorf("sendMessage failed: %s", err)
 		return "", err
 	}
 	return strconv.Itoa(res.MessageID), nil

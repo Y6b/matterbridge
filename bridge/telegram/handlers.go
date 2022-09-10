@@ -417,13 +417,17 @@ func (b *Btelegram) handleDelete(msg *config.Message, chatid int64) (string, err
 // handleContactMessage handles posting contact messages
 func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (string, error) {
 
-    cleanText := strings.TrimSuffix(msg.Text, "\n")
-    parts := strings.Split(cleanText, ":")
+    cleanText := strings.ReplaceAll(msg.Text, "\n", ":")
+    cleanText2 := strings.ReplaceAll(cleanText, ";", ":")
+    parts := strings.Split(cleanText2, ":")
 
     i := 0
     for parts[i] != "FN" {
         b.Log.Debugf("parts: %s",parts[i])
         i += 1
+        if(i>len(parts){
+        break
+        }
 
     }
 

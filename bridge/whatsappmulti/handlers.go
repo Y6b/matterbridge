@@ -426,6 +426,7 @@ func (b *Bwhatsapp) handleDocumentMessage(msg *events.Message) {
 		return
 	}
 
+    b.Log.Debugf("Document Mimetype detection : %s", fileExt)
 	filename := fmt.Sprintf("%v", imsg.GetFileName())
 
 	b.Log.Debugf("Trying to download %s with extension %s and type %s", filename, fileExt, imsg.GetMimetype())

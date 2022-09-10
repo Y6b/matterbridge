@@ -424,6 +424,8 @@ func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (str
     i := 0
     n := 0
     out := false
+    foundFN := false
+
     for parts[i] != "FN" {
         b.Log.Debugf("parts: %s",parts[i])
         i += 1
@@ -433,6 +435,7 @@ func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (str
         }
 
         if parts[i] == "FN"{
+            foundFN = true
             n = i
             for parts[n] != "TEL"{
                 b.Log.Debugf("partsN: %s",parts[n])
@@ -454,8 +457,19 @@ func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (str
 
     }
 
+    tel := "0"
+    firstName := ""
 
-	cfg := tgbotapi.NewContact(chatid, parts[n+2],parts[i+1])
+    if (out == true){
+        if (foundFN == true){
+        firstName := parts[i+1]
+        }
+    } else {
+        tel = parts[n+2]
+        firstName = parts[i+1]
+    }
+
+	cfg := tgbotapi.NewContact(chatid, tel,firstName)
 	cfg.VCard = msg.Text
    // b.Log.Debugf("Contact message made: %+v",cfg)
 

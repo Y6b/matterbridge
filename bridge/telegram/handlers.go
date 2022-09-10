@@ -420,7 +420,7 @@ func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (str
     parts := strings.Split(msg.Text, " ")
 
     i := 0
-    for parts[i] = "FN" {
+    for parts[i] == "FN" {
         i += 1
     }
 

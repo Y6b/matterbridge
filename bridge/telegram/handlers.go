@@ -342,6 +342,8 @@ func (b *Btelegram) handleDownload(rmsg *config.Message, message *tgbotapi.Messa
 		photos := message.Photo
 		size = photos[len(photos)-1].FileSize
 		text, name, url = b.getDownloadInfo(photos[len(photos)-1].FileID, "", true)
+    case message.Contact != nil:
+        b.Log.Debugf("Contact msg has converting %+v", message.Contact)
 	}
 
 	// if name is empty we didn't match a thing to download

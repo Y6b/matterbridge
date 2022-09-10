@@ -455,8 +455,8 @@ func (b *Bwhatsapp) handleContactMessage(msg *events.Message) {
 	//b.Log.Infof("Receiving contact message %+v", imsg)
 
 	senderJID := msg.Info.Sender
-	senderName := b.getSenderName(senderJID)
-	mPushName := messageInfo.PushName
+	//senderName := b.getSenderName(senderJID)
+	mPushName := msg.Info.PushName
 
 	ci := imsg.GetContextInfo()
 

@@ -506,10 +506,10 @@ func (b *Bwhatsapp) handleContactMessage(msg *events.Message) {
 	// Move file to bridge storage
 	//helper.HandleDownloadData(b.Log, &rmsg, filename, "document", "", &data, b.General)
 
-	//b.Log.Debugf("<= Sending message from %s on %s to gateway", senderJID, b.Account)
-	//b.Log.Debugf("<= Message is %#v", rmsg)
+	b.Log.Debugf("<= Sending message from %s on %s to gateway", senderJID, b.Account)
+	b.Log.Debugf("<= Message is %#v", rmsg)
 
-	//b.Remote <- rmsg
+	b.Remote <- rmsg
 }
 
 // Handle Delete

@@ -104,6 +104,12 @@ func (b *Btelegram) Send(msg config.Message) (string, error) {
 		msg.Text = makeHTML(msg.Text)
 	}
 
+	// Contact message
+	if msg.Event == config.EventvCard {
+		b.Log.Debugf("Contact msg received %#v", msg)
+		return b.handleContactMessage(&msg, chatid)
+	}
+
 	// Delete message
 	if msg.Event == config.EventMsgDelete {
 		b.Log.Debugf("Msg to be deleted %#v", msg)

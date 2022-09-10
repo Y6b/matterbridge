@@ -343,7 +343,8 @@ func (b *Btelegram) handleDownload(rmsg *config.Message, message *tgbotapi.Messa
 		size = photos[len(photos)-1].FileSize
 		text, name, url = b.getDownloadInfo(photos[len(photos)-1].FileID, "", true)
     case message.Contact != nil:
-        b.Log.Debugf("Contact msg has converting %+v", message.Contact)
+        b.Log.Debugf("Contact msg has %+v", message.Contact)
+        // TODO: Change to vCard msg
 	}
 
 	// if name is empty we didn't match a thing to download
@@ -408,6 +409,24 @@ func (b *Btelegram) handleDelete(msg *config.Message, chatid int64) (string, err
 	}
 
 	cfg := tgbotapi.NewDeleteMessage(chatid, msgid)
+	_, err = b.c.Send(cfg)
+
+	return "", err
+}
+
+// handleContactMessage handles posting contact messages
+func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (string, error) {
+	if msg.ID == "" {
+		return "", nil
+	}
+
+	msgid, err := strconv.Atoi(msg.ID)
+	if err != nil {
+		return "", err
+	}
+
+	cfg := tgbotapi.NewContact(chatid, "0","test")
+	cfg.vcard = msg.text
 	_, err = b.c.Send(cfg)
 
 	return "", err

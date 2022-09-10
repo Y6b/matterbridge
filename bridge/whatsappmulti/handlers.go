@@ -91,7 +91,7 @@ func (b *Bwhatsapp) handleTextMessage(messageInfo types.MessageInfo, msg *proto.
 		return
 	}
 
-
+    //Reply handling
 	var text string
 	ci := msg.GetExtendedTextMessage().GetContextInfo()
 	b.Log.Debugf("<= ContextInfo is %+v", ci)
@@ -449,13 +449,15 @@ func (b *Bwhatsapp) handleDocumentMessage(msg *events.Message) {
 	b.Remote <- rmsg
 }
 
-//Handle vcard contacts
+//Handle vcard contacts from Whatsapp
 func (b *Bwhatsapp) handleContactMessage(msg *events.Message) {
 	imsg := msg.Message.GetContactMessage()
 	//b.Log.Infof("Receiving contact message %+v", imsg)
 
 	senderJID := msg.Info.Sender
 	senderName := b.getSenderName(senderJID)
+	mPushName := messageInfo.PushName
+
 	ci := imsg.GetContextInfo()
 
 	if senderJID == (types.JID{}) && ci.Participant != nil {
@@ -464,12 +466,14 @@ func (b *Bwhatsapp) handleContactMessage(msg *events.Message) {
 
 	rmsg := config.Message{
 		UserID:   senderJID.String(),
-		Username: senderName,
+		Username: mPushName,
+		Text:     imsg.GetVcard(),
 		Channel:  msg.Info.Chat.String(),
 		Account:  b.Account,
 		Protocol: b.Protocol,
 		Extra:    make(map[string][]interface{}),
 		ID:       msg.Info.ID,
+		Event:    "vCard",
 	}
 
 	if avatarURL, exists := b.userAvatars[senderJID.String()]; exists {

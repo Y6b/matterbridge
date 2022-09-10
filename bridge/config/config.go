@@ -28,6 +28,7 @@ const (
 	EventUserTyping        = "user_typing"
 	EventGetChannelMembers = "get_channel_members"
 	EventNoticeIRC         = "notice_irc"
+	EventvCard             = "vCard"
 )
 
 const ParentIDNotFound = "msg-parent-not-found"

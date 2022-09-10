@@ -449,6 +449,62 @@ func (b *Bwhatsapp) handleDocumentMessage(msg *events.Message) {
 	b.Remote <- rmsg
 }
 
+//Handle vcard contacts
+func (b *Bwhatsapp) handleContactMessage(msg *events.Message) {
+	imsg := msg.Message.GetContactMessage()
+
+	senderJID := msg.Info.Sender
+	senderName := b.getSenderName(senderJID)
+	ci := imsg.GetContextInfo()
+
+	if senderJID == (types.JID{}) && ci.Participant != nil {
+		senderJID = types.NewJID(ci.GetParticipant(), types.DefaultUserServer)
+	}
+
+	rmsg := config.Message{
+		UserID:   senderJID.String(),
+		Username: senderName,
+		Channel:  msg.Info.Chat.String(),
+		Account:  b.Account,
+		Protocol: b.Protocol,
+		Extra:    make(map[string][]interface{}),
+		ID:       msg.Info.ID,
+	}
+
+	if avatarURL, exists := b.userAvatars[senderJID.String()]; exists {
+		rmsg.Avatar = avatarURL
+	}
+
+	//fileExt, err := mime.ExtensionsByType(imsg.GetMimetype())
+	//if err != nil {
+	//	b.Log.Errorf("Mimetype detection error: %s", err)
+
+	//	return
+
+	//}
+
+    fileExt[0]=".vcard"
+    //b.Log.Debugf("Document Mimetype detection : %s", fileExt)
+
+	filename := fmt.Sprintf("%v", imsg.GetFileName())
+
+	b.Log.Debugf("Trying to download %s with extension %s and type Vcard", filename, fileExt)
+
+	data, err := b.wc.Download(imsg)
+	if err != nil {
+		b.Log.Errorf("Download document message failed: %s", err)
+
+		return
+	}
+
+	// Move file to bridge storage
+	helper.HandleDownloadData(b.Log, &rmsg, filename, "document", "", &data, b.General)
+
+	b.Log.Debugf("<= Sending message from %s on %s to gateway", senderJID, b.Account)
+	b.Log.Debugf("<= Message is %#v", rmsg)
+
+	b.Remote <- rmsg
+}
 
 // Handle Delete
 func (b *Bwhatsapp) handleDelete(msg *events.Message) {

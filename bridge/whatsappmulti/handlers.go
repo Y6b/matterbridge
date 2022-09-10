@@ -488,22 +488,23 @@ func (b *Bwhatsapp) handleContactMessage(msg *events.Message) {
 
 	filename := fmt.Sprintf("%v", imsg.GetDisplayName())
 
-	b.Log.Debugf("Trying to download %s with extension %s and type Vcard", filename, fileExt)
+	b.Log.Debugf("Contact name %s and contact array has %+v ", filename, imsg.GetContacts())
 
-	data, err := b.wc.Download(imsg)
-	if err != nil {
-		b.Log.Errorf("Download document message failed: %s", err)
+	//data, err := b.wc.Download(imsg)
+	//if err != nil {
+	//	b.Log.Errorf("Download document message failed: %s", err)
 
-		return
-	}
+//		return
+	//}
+    //data := imsg.GetContacts()
 
 	// Move file to bridge storage
-	helper.HandleDownloadData(b.Log, &rmsg, filename, "document", "", &data, b.General)
+	//helper.HandleDownloadData(b.Log, &rmsg, filename, "document", "", &data, b.General)
 
-	b.Log.Debugf("<= Sending message from %s on %s to gateway", senderJID, b.Account)
-	b.Log.Debugf("<= Message is %#v", rmsg)
+	//b.Log.Debugf("<= Sending message from %s on %s to gateway", senderJID, b.Account)
+	//b.Log.Debugf("<= Message is %#v", rmsg)
 
-	b.Remote <- rmsg
+	//b.Remote <- rmsg
 }
 
 // Handle Delete

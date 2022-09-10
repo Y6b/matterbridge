@@ -421,7 +421,9 @@ func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (str
 
     i := 0
     for parts[i] != "FN" {
+        b.Log.Debugf("parts: %s",parts[i])
         i += 1
+
     }
 
 	cfg := tgbotapi.NewContact(chatid, "9999",parts[i+1])

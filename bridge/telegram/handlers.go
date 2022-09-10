@@ -420,13 +420,8 @@ func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (str
 		return "", nil
 	}
 
-	msgid, err := strconv.Atoi(msg.ID)
-	if err != nil {
-		return "", err
-	}
-
 	cfg := tgbotapi.NewContact(chatid, "0","test")
-	cfg.vcard = msg.text
+	cfg.Vcard = msg.Text
 	_, err = b.c.Send(cfg)
 
 	return "", err

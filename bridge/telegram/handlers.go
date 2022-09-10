@@ -426,9 +426,7 @@ func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (str
     for parts[i] != "FN" {
         b.Log.Debugf("parts: %s",parts[i])
         i += 1
-        if i > len(parts) {
-        break
-        }
+
         if parts[i] == "FN"{
             n = i
             for parts[n] != "TEL"{
@@ -439,6 +437,10 @@ func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (str
             }
 
 
+        }
+
+        if i > len(parts) {
+        break
         }
 
     }

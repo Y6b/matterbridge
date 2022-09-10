@@ -416,9 +416,6 @@ func (b *Btelegram) handleDelete(msg *config.Message, chatid int64) (string, err
 
 // handleContactMessage handles posting contact messages
 func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (string, error) {
-	if msg.ID == "" {
-		return "", nil
-	}
 
 	cfg := tgbotapi.NewContact(chatid, "9999","test")
 	cfg.VCard = msg.Text

@@ -424,7 +424,12 @@ func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (str
 	cfg.VCard = msg.Text
 	_, err := b.c.Send(cfg)
 
-	return "", err
+	if err != nil {
+	    b.Log.Errorf("Error sending contact message: %s",err)
+	   return "", err
+	   }
+
+	return strconv.Itoa(res.MessageID), nil
 }
 
 // handleEdit handles message editing.

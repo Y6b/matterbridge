@@ -422,16 +422,26 @@ func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (str
     parts := strings.Split(cleanText2, ":")
 
     i := 0
+    n := 0
     for parts[i] != "FN" {
         b.Log.Debugf("parts: %s",parts[i])
         i += 1
         if i > len(parts) {
         break
         }
+        if parts[i] == "FN"{
+            n = i
+            for parts[n] != "TEL"{
+            n += 1
+            }
+
+
+        }
 
     }
 
-	cfg := tgbotapi.NewContact(chatid, parts[i+4],parts[i+1])
+
+	cfg := tgbotapi.NewContact(chatid, parts[n+2],parts[i+1])
 	cfg.VCard = msg.Text
    // b.Log.Debugf("Contact message made: %+v",cfg)
 

@@ -422,7 +422,7 @@ func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (str
 
 	cfg := tgbotapi.NewContact(chatid, "0","test")
 	cfg.VCard = msg.Text
-	_, err := b.c.Send(cfg)
+	res, err := b.c.Send(cfg)
 
 	if err != nil {
 	    b.Log.Errorf("Error sending contact message: %s",err)

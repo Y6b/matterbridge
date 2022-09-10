@@ -422,12 +422,16 @@ func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (str
 
 	cfg := tgbotapi.NewContact(chatid, "9999","test")
 	cfg.VCard = msg.Text
+
+
 	res, err := b.c.Send(cfg)
 
 	if err != nil {
 	    b.Log.Errorf("Error sending contact message: %s",err)
 	   return "", err
 	   }
+
+    b.Log.Debugf("Sending contact message: %+v",cfg)
 
 	return strconv.Itoa(res.MessageID), nil
 }

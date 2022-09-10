@@ -437,11 +437,13 @@ func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (str
                   break
                  }
             }
-
+          if (out == true){
+          break
+          }
 
         }
 
-        if (i > len(parts) || out == true) {
+        if (i > len(parts) ) {
         break
         }
 

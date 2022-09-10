@@ -462,7 +462,7 @@ func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (str
 
     if (out == true){
         if (foundFN == true){
-        firstName := parts[i+1]
+        firstName = parts[i+1]
         }
     } else {
         tel = parts[n+2]

@@ -425,6 +425,7 @@ func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (str
     n := 0
     out := false
     foundFN := false
+    var re = regexp.MustCompile(`TEL|iteml.TEL`)
 
     for parts[i] != "FN" {
         b.Log.Debugf("parts: %s",parts[i])
@@ -437,7 +438,7 @@ func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (str
         if parts[i] == "FN"{
             foundFN = true
             n = i
-            for (parts[n] != "TEL") || (parts[n] != "iteml.TEL") {
+            for !(re.MatchString(parts[n])) {
                 b.Log.Debugf("partsN: %s",parts[n])
                 n += 1
                 if (n >= len(parts)) {

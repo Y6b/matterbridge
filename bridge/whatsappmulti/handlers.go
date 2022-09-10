@@ -483,7 +483,7 @@ func (b *Bwhatsapp) handleContactMessage(msg *events.Message) {
 
 	//}
 
-    fileExt[0]=".vcard"
+    fileExt := ".vcard"
     //b.Log.Debugf("Document Mimetype detection : %s", fileExt)
 
 	filename := fmt.Sprintf("%v", imsg.GetFileName())

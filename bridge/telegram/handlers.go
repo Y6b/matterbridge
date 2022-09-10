@@ -437,7 +437,7 @@ func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (str
             for parts[n] != "TEL"{
                 b.Log.Debugf("partsN: %s",parts[n])
                 n += 1
-                if n > len(parts) {
+                if (n >= len(parts)) {
                   out = true
                   b.Log.Debugf("broke 1")
                   break

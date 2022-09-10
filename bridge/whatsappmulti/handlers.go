@@ -283,7 +283,7 @@ func (b *Bwhatsapp) handleVideoMessage(msg *events.Message) {
 // HandleImageMessage sent from WhatsApp, relay it to the brige
 func (b *Bwhatsapp) handleStickerMessage(msg *events.Message) {
 	imsg := msg.Message.GetStickerMessage()
-	b.Log.Infof("Receiving sticker message %+v", imsg)
+	//b.Log.Infof("Receiving sticker message %+v", imsg)
 
 	senderJID := msg.Info.Sender
 	senderName := b.getSenderName(senderJID)
@@ -452,6 +452,7 @@ func (b *Bwhatsapp) handleDocumentMessage(msg *events.Message) {
 //Handle vcard contacts
 func (b *Bwhatsapp) handleContactMessage(msg *events.Message) {
 	imsg := msg.Message.GetContactMessage()
+	//b.Log.Infof("Receiving contact message %+v", imsg)
 
 	senderJID := msg.Info.Sender
 	senderName := b.getSenderName(senderJID)
@@ -483,12 +484,12 @@ func (b *Bwhatsapp) handleContactMessage(msg *events.Message) {
 
 	//}
 
-    fileExt := ".vcard"
+    //fileExt := ".vcard"
     //b.Log.Debugf("Document Mimetype detection : %s", fileExt)
 
 	filename := fmt.Sprintf("%v", imsg.GetDisplayName())
 
-	b.Log.Debugf("Contact name %s and contact array has %+v ", filename, imsg.GetContacts())
+	b.Log.Debugf("Contact name %s and contact array has %+v ", filename, imsg)
 
 	//data, err := b.wc.Download(imsg)
 	//if err != nil {

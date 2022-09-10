@@ -71,7 +71,7 @@ func (b *Bwhatsapp) handleMessage(message *events.Message) {
 	case msg.StickerMessage != nil:
 		b.handleStickerMessage(message)
 	case msg.ContactMessage != nil:
-	    b.handleDocumentMessage(message)
+	    b.handleContactMessage(message)
 	}
 }
 

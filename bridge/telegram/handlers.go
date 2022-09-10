@@ -421,8 +421,8 @@ func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (str
 	}
 
 	cfg := tgbotapi.NewContact(chatid, "0","test")
-	cfg.Vcard = msg.Text
-	_, err = b.c.Send(cfg)
+	cfg.VCard = msg.Text
+	_, err := b.c.Send(cfg)
 
 	return "", err
 }

@@ -122,13 +122,13 @@ func (b *Bwhatsapp) handleTextMessage(messageInfo types.MessageInfo, msg *proto.
 			}
 		}
 
-	    if ci.QuotedMessage != nil{
+	    if ci != nil && ci.QuotedMessage != nil{
 	    //b.Log.Debugf("Qouted msg is %#v",ci.QuotedMessage.ExtendedTextMessage.GetText())
 
             if len(ci.QuotedMessage.ExtendedTextMessage.GetText()) >0 {
                 //handleQuote , only for text msgs now
               text = strings.Join([]string{text, "(re" , ci.GetParticipant() ,ci.QuotedMessage.ExtendedTextMessage.GetText(),")"}, " ")
-              b.Log.Debugf("Qoutes Message is %#v", text)
+              b.Log.Debugf("Quoted Message is %#v", text)
             }
         }
 	}

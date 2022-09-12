@@ -418,10 +418,13 @@ func (b *Btelegram) handleDelete(msg *config.Message, chatid int64) (string, err
 // handleContactMessage handles posting contact messages
 func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (string, error) {
 
-    cleanText := strings.ReplaceAll(msg.Text, "\n", ":")
-    cleanText2 := strings.ReplaceAll(cleanText, ";", ":")
-    parts := strings.Split(cleanText2, ":")
+    // Begin contact message conversion to Telegram compatible format
 
+    cleanText := strings.ReplaceAll(msg.Text, "\n", ":") // Remove all newlines, replace with colons
+    cleanText2 := strings.ReplaceAll(cleanText, ";", ":") //Remove all semi colons, replace with colons
+    parts := strings.Split(cleanText2, ":") //Split based on colons
+
+    // Extract FN and TEL from vCard for phone and firstname values
     i := 0
     n := 0
     out := false
@@ -472,6 +475,8 @@ func (b *Btelegram) handleContactMessage(msg *config.Message, chatid int64) (str
     }
 
     b.Log.Debugf("Contact message tel & fn: %s , %s ",tel,firstName)
+
+
 	cfg := tgbotapi.NewContact(chatid, tel,firstName)
 	cfg.VCard = msg.Text
    // b.Log.Debugf("Contact message made: %+v",cfg)

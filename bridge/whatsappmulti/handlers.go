@@ -121,18 +121,28 @@ func (b *Bwhatsapp) handleTextMessage(messageInfo types.MessageInfo, msg *proto.
 				text = strings.Replace(text, "@"+numberAndSuffix[0], "@"+mention, 1)
 			}
 		}
+
+	    if ci.QuotedMessage != nil{
+	    //b.Log.Debugf("Qouted msg is %#v",ci.QuotedMessage.ExtendedTextMessage.GetText())
+
+            if len(ci.QuotedMessage.ExtendedTextMessage.GetText()) >0 {
+                //handleQuote , only for text msgs now
+              text = strings.Join([]string{text, "(re" , ci.GetParticipant() ,ci.QuotedMessage.ExtendedTextMessage.GetText(),")"}, " ")
+              b.Log.Debugf("Qoutes Message is %#v", text)
+            }
+        }
 	}
 
 
-    if ci.QuotedMessage != nil{
-	//b.Log.Debugf("Qouted msg is %#v",ci.QuotedMessage.ExtendedTextMessage.GetText())
-
-        if len(ci.QuotedMessage.ExtendedTextMessage.GetText()) >0 {
-            //handleQuote , only for text msgs now
-            text = strings.Join([]string{text, "(re" , ci.GetParticipant() ,ci.QuotedMessage.ExtendedTextMessage.GetText(),")"}, " ")
-            b.Log.Debugf("Qoutes Message is %#v", text)
-        }
-    }
+//     if ci.QuotedMessage != nil{
+// 	//b.Log.Debugf("Qouted msg is %#v",ci.QuotedMessage.ExtendedTextMessage.GetText())
+//
+//         if len(ci.QuotedMessage.ExtendedTextMessage.GetText()) >0 {
+//             //handleQuote , only for text msgs now
+//             text = strings.Join([]string{text, "(re" , ci.GetParticipant() ,ci.QuotedMessage.ExtendedTextMessage.GetText(),")"}, " ")
+//             b.Log.Debugf("Qoutes Message is %#v", text)
+//         }
+//     }
 
 
 	rmsg := config.Message{
